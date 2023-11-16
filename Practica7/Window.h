@@ -31,6 +31,7 @@ public:
 	GLboolean getMouseFirstMoved() { return mouseFirstMoved; }
 	GLboolean getAction() { return action; }
 	
+	int getnumCamara() { return numCamara; }
 
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
@@ -64,6 +65,7 @@ private:
 	GLboolean moverFlipperSuperiorIzq;
 	GLboolean moverFlipperSuperiorDer;
 	GLboolean action = false;
+	int numCamara = 0;
 
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);

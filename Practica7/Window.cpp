@@ -26,6 +26,8 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	moverFlipperSuperiorIzq = false;
 	moverFlipperSuperiorDer = false;
 
+	numCamara = 1;
+
 
 	for (size_t i = 0; i < 1024; i++)
 	{
@@ -49,7 +51,7 @@ int Window::Initialise()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	//CREAR VENTANA
-	mainWindow = glfwCreateWindow(width, height, "Practica09:Animación básica", NULL, NULL);
+	mainWindow = glfwCreateWindow(width, height, "Proyecto Final: Pinball Anya x Hora de Aventura, por Britt Bucio", NULL, NULL);
 
 	if (!mainWindow)
 	{
@@ -155,6 +157,17 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->anguloLlanta = 0.0;
 	}
 
+	//Para cambio de camara
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+	{
+		theWindow->numCamara += 1;
+		if (theWindow->numCamara > 2)
+		{
+			theWindow->numCamara = 0;
+		}
+	}
+
+
 	//Nuevas condicionales (apagado de luces)
 	if (key == GLFW_KEY_3 && theWindow->apagaPointLight == false && action == GLFW_PRESS)
 	{
@@ -195,11 +208,11 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 
 	//Condicionales para meter moneda y tirar dado
-	if (key == GLFW_KEY_H && theWindow->meterMoneda == false && action == GLFW_PRESS)
+	if (key == GLFW_KEY_7 && theWindow->meterMoneda == false && action == GLFW_PRESS)
 	{
 		theWindow->meterMoneda = true;
 	}
-	else if (key == GLFW_KEY_H && theWindow->meterMoneda == true && action == GLFW_PRESS)
+	else if (key == GLFW_KEY_7 && theWindow->meterMoneda == true && action == GLFW_PRESS)
 	{
 		theWindow->meterMoneda = false;
 	}
