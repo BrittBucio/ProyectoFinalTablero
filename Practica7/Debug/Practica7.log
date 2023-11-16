@@ -1,8 +1,19 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (Practica7.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
-  practica10keyframes.cpp
-E:\Proyecto\Practica7\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\Practica7\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\Practica7\practica10keyframes.cpp(579,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\Practica7\practica10keyframes.cpp(581,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\Practica7\practica10keyframes.cpp(813,26): warning C4305: '+=': truncamiento de 'double' a 'float'
-  Practica7.vcxproj -> E:\Proyecto\Debug\Practica7-8.exe
+  Window.cpp
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(163,62): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(172,63): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(183,61): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(192,62): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(202,58): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(211,56): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(221,65): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(252,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(253,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(259,28): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(260,40): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(262,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(263,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(88): warning C4715: 'Window::Initialise': no todas las rutas de acceso de control devuelven un valor
+  Practica7.vcxproj -> E:\Proyecto\ProyectoFinalTablero\Debug\Practica7-8.exe

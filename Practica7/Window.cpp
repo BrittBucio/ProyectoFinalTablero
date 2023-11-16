@@ -21,6 +21,11 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	meterMoneda = false;
 	tirarDado = false;
 	despegaHelicoptero = false;
+	moverFlipperInferiorIzq = false;
+	moverFlipperInferiorDer = false;
+	moverFlipperSuperiorIzq = false;
+	moverFlipperSuperiorDer = false;
+
 
 	for (size_t i = 0; i < 1024; i++)
 	{
@@ -139,10 +144,6 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->anguloCofre -= 10.0;
 	}
 
-	if (key == GLFW_KEY_V)
-	{
-		theWindow->anguloLlanta += 10.0;
-	}
 
 	if (key == GLFW_KEY_B)
 	{
@@ -194,11 +195,11 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 
 	//Condicionales para meter moneda y tirar dado
-	if (key == GLFW_KEY_7 && theWindow->meterMoneda == false && action == GLFW_PRESS)
+	if (key == GLFW_KEY_H && theWindow->meterMoneda == false && action == GLFW_PRESS)
 	{
 		theWindow->meterMoneda = true;
 	}
-	else if (key == GLFW_KEY_7 && theWindow->meterMoneda == true && action == GLFW_PRESS)
+	else if (key == GLFW_KEY_H && theWindow->meterMoneda == true && action == GLFW_PRESS)
 	{
 		theWindow->meterMoneda = false;
 	}
@@ -222,6 +223,8 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->despegaHelicoptero = false;
 	}
 
+	
+
 
 	if (key >= 0 && key < 1024)
 	{
@@ -242,12 +245,16 @@ void Window::ManejaMouse(GLFWwindow* window, double xPos, double yPos)
 {
 	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
+	//Agregar funcionalidad para hacer que la palanca se mueva con el mouse
+
 	if (theWindow->mouseFirstMoved)
 	{
 		theWindow->lastX = xPos;
 		theWindow->lastY = yPos;
 		theWindow->mouseFirstMoved = false;
 	}
+
+	
 
 	theWindow->xChange = xPos - theWindow->lastX;
 	theWindow->yChange = theWindow->lastY - yPos;

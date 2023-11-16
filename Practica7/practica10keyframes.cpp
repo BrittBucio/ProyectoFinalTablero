@@ -1,7 +1,7 @@
-/* Semestre 2024-1
-AnimaciÛn por keyframes
-La textura del skybox fue conseguida desde la p·gina https ://opengameart.org/content/elyvisions-skyboxes?page=1
-y editÈ en Gimp rotando 90 grados en sentido antihorario la imagen  sp2_up.png para poder ver continuidad.
+Ôªø/* Semestre 2024-1
+Animaci√≥n por keyframes
+La textura del skybox fue conseguida desde la p√°gina https ://opengameart.org/content/elyvisions-skyboxes?page=1
+y edit√© en Gimp rotando 90 grados en sentido antihorario la imagen  sp2_up.png para poder ver continuidad.
 Fuentes :
 	https ://www.khronos.org/opengl/wiki/Keyframe_Animation
 	http ://what-when-how.com/wp-content/uploads/2012/07/tmpcd0074_thumb.png
@@ -33,7 +33,7 @@ Fuentes :
 #include"Model.h"
 #include "Skybox.h"
 
-//para iluminaciÛn
+//para iluminaci√≥n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -41,7 +41,7 @@ Fuentes :
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
-//variables para animaciÛn
+//variables para animaci√≥n
 float movCoche;
 float movOffset;
 float rotllanta;
@@ -57,6 +57,31 @@ float angulovaria = 0.0f;
 //variables para keyframes
 float reproduciranimacion, habilitaranimacion, guardoFrame, reinicioFrame, ciclo, ciclo2, contador = 0;
 
+//variables para animaci√≥n simple de la pelota
+float movPelota;
+float movPelotaOffset;
+float rotPelota;
+float rotPelotaOffset;
+bool avanzaPelota;
+
+//variables para animaci√≥n simple de la moneda
+float movMoneda;
+float movMonedaOffset;
+float rotMoneda;
+float rotMonedaOffset;
+bool avanzaMoneda;
+
+//variables para animaci√≥n simple de la palanca
+float movPalanca;
+float movPalancaOffset;
+float rotPalanca;
+float rotPalancaOffset;
+bool avanzaPalanca;
+
+
+
+int tiempoLuz = 0;
+bool apagadoLuz = false;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -86,6 +111,7 @@ Skybox skybox;
 Model tablero_pinball;
 Model cuerpo;
 Model frente;
+Model pantalla_marco;
 Model base_monedas;
 Model base_monedas_amarilla;
 Model moneda_entrada;
@@ -94,11 +120,35 @@ Model vidrio;
 Model patas;
 Model resorte;
 Model soporte_resorte;
+Model palanca;
+Model base_tablero;
+Model base_segunda_capa;
+
+//Obst√°culos del tablero de pinball
+Model objeto_animado_ins1;
+Model objeto_animado_ins2;
+Model objeto_animado_ins3;
+Model obstaculo_medio_tubo;
+Model obstaculo_rejilla;
+Model paleta_superior_der;
+Model paleta_superior_izq;
+Model paleta_inferior_der;
+Model paleta_inferior_izq;
+Model rampa;
+Model tornillos_morados;
+Model tornillos_morados2;
 
 
 Model canica;
 Model canica2;
 Model moneda;
+
+//Modelos del Avatar
+Model anya_cabeza;
+Model anya_cuerpo;
+Model anya_manos;
+Model anya_pierna_der;
+Model anya_pierna_izq;
 
 
 //materiales
@@ -123,10 +173,10 @@ static const char* vShader = "shaders/shader_light.vert";
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
 
-//funciÛn para teclado de keyframes 
+//funci√≥n para teclado de keyframes 
 void inputKeyframes(bool* keys);
 
-//c·lculo del promedio de las normales para sombreado de Phong
+//c√°lculo del promedio de las normales para sombreado de Phong
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
 {
@@ -289,17 +339,22 @@ void CreateShaders()
 
 
 bool animacion = false;
-
+bool animacion2 = false;
 
 
 //NEW// Keyframes
-float posXavion = 2.0, posYavion = 5.0, posZavion = -3.0;
-float	movAvion_x = 0.0f, movAvion_y = 0.0f;
-float giroAvion = 0;
+
 
 float posXpelota = 0.0 , posYpelota = 0.0, posZpelota = 0.0;
 float	movPelota_x = 0.0f, movPelota_y = 0.0f, movPelota_z = 0.0f;
 float rotacionPelota = 0.0f;
+
+//Para animaci√≥n del avatar
+
+float posXanya = 0.0, posYanya = 0.0, posZanya = 0.0;
+float	movAnya_x = 0.0f, movAnya_y = 0.0f, movAnya_z = 0.0f;
+float rotacionAnya = 0.0f;
+
 
 #define MAX_FRAMES 100
 int i_max_steps = 90;
@@ -309,12 +364,6 @@ int i_curr_steps = 4;
 typedef struct _frame
 {
 	//Variables para GUARDAR Key Frames
-	float movAvion_x;		//Variable para PosicionX
-	float movAvion_y;		//Variable para PosicionY
-	float movAvion_xInc;		//Variable para IncrementoX
-	float movAvion_yInc;		//Variable para IncrementoY
-	float giroAvion;
-	float giroAvionInc;
 	float movPelota_x;		//Variable para PosicionX
 	float movPelota_y;		//Variable para PosicionY
 	float movPelota_z;		//Variable para PosicionZ
@@ -323,10 +372,20 @@ typedef struct _frame
 	float movPelota_zInc;	//Variable para IncrementoZ
 	float rotacionPelota;	//Variable para Rotacion
 	float rotacionPelotaInc;//Variable para Incremento de Rotacion
+
+	float movAnya_x;		//Variable para PosicionX
+	float movAnya_y;		//Variable para PosicionY
+	float movAnya_z;		//Variable para PosicionZ
+	float movAnya_xInc;	//Variable para IncrementoX
+    float movAnya_yInc;	//Variable para IncrementoY
+	float movAnya_zInc;	//Variable para IncrementoZ
+	float rotacionAnya;		//Variable para Rotacion
+	float rotacionAnyaInc;	//Variable para Incremento de Rotacion
+
 }FRAME;
 
 FRAME KeyFrame[MAX_FRAMES];
-int FrameIndex = 4;			//introducir datos
+int FrameIndex = 64;			//introducir datos
 bool play = false;
 int playIndex = 0;
 
@@ -340,7 +399,12 @@ void saveFrame(void) //tecla L
 	KeyFrame[FrameIndex].movPelota_y = movPelota_y;
 	KeyFrame[FrameIndex].movPelota_z = movPelota_z;
 	KeyFrame[FrameIndex].rotacionPelota;//completar
-	//no volatil, agregar una forma de escribir a un archivo para guardar los frames
+
+	KeyFrame[FrameIndex].movAnya_x = movAnya_x;
+	KeyFrame[FrameIndex].movAnya_y = movAnya_y;
+	KeyFrame[FrameIndex].movAnya_z = movAnya_z;
+	KeyFrame[FrameIndex].rotacionAnya;//completar
+	 
 	FrameIndex++;
 }
 
@@ -351,6 +415,11 @@ void resetElements(void) //Tecla 0
 	movPelota_y = KeyFrame[0].movPelota_y;
 	movPelota_z = KeyFrame[0].movPelota_z;
 	rotacionPelota = KeyFrame[0].rotacionPelota;
+
+	movAnya_x = KeyFrame[0].movAnya_x;
+	movAnya_y = KeyFrame[0].movAnya_y;
+	movAnya_z = KeyFrame[0].movAnya_z;
+	rotacionAnya = KeyFrame[0].rotacionAnya;
 }
 
 void interpolation(void)
@@ -360,6 +429,10 @@ void interpolation(void)
 	KeyFrame[playIndex].movPelota_zInc = (KeyFrame[playIndex + 1].movPelota_z - KeyFrame[playIndex].movPelota_z) / i_max_steps;
 	KeyFrame[playIndex].rotacionPelotaInc = (KeyFrame[playIndex + 1].rotacionPelota - KeyFrame[playIndex].rotacionPelota) / i_max_steps;
 
+	KeyFrame[playIndex].movAnya_xInc = (KeyFrame[playIndex + 1].movAnya_x - KeyFrame[playIndex].movAnya_x) / i_max_steps;
+	KeyFrame[playIndex].movAnya_yInc = (KeyFrame[playIndex + 1].movAnya_y - KeyFrame[playIndex].movAnya_y) / i_max_steps;
+	KeyFrame[playIndex].movAnya_zInc = (KeyFrame[playIndex + 1].movAnya_z - KeyFrame[playIndex].movAnya_z) / i_max_steps;
+	KeyFrame[playIndex].rotacionAnyaInc = (KeyFrame[playIndex + 1].rotacionAnya - KeyFrame[playIndex].rotacionAnya) / i_max_steps;
 }
 
 
@@ -368,18 +441,18 @@ void animate(void)
 	//Movimiento del objeto con barra espaciadora
 	if (play)
 	{
-		if (i_curr_steps >= i_max_steps) //fin de animaciÛn entre frames?
+		if (i_curr_steps >= i_max_steps) //fin de animaci√≥n entre frames?
 		{
 			playIndex++;
 			printf("playindex : %d\n", playIndex);
-			if (playIndex > FrameIndex - 2)	//Fin de toda la animaciÛn con ˙ltimo frame?
+			if (playIndex > FrameIndex - 2)	//Fin de toda la animaci√≥n con √∫ltimo frame?
 			{
-				printf("Frame index= %d\n", FrameIndex);
-				printf("termino la animacion\n");
+				/*printf("Frame index= %d\n", FrameIndex);
+				printf("termino la animacion\n");*/
 				playIndex = 0;
 				play = false;
 			}
-			else //InterpolaciÛn del prÛximo cuadro
+			else //Interpolaci√≥n del pr√≥ximo cuadro
 			{
 				
 				i_curr_steps = 0; //Resetea contador
@@ -389,11 +462,51 @@ void animate(void)
 		}
 		else
 		{
-			//Dibujar AnimaciÛn
+			//Dibujar Animaci√≥n
 			movPelota_x += KeyFrame[playIndex].movPelota_xInc;
 			movPelota_y += KeyFrame[playIndex].movPelota_yInc;
 			movPelota_z += KeyFrame[playIndex].movPelota_zInc;
 			rotacionPelota += KeyFrame[playIndex].rotacionPelotaInc;
+			i_curr_steps++;
+		}
+	
+
+	}
+}
+
+void animate2(void)
+{
+	//Movimiento del objeto con barra espaciadora
+	if (play)
+	{
+		
+		if (i_curr_steps >= i_max_steps) //fin de animaci√≥n entre frames?
+		{
+			playIndex++;
+			printf("playindex : %d\n", playIndex);
+			if (playIndex > FrameIndex - 2)	//Fin de toda la animaci√≥n con √∫ltimo frame?
+			{
+				/*printf("Frame index= %d\n", FrameIndex);
+				printf("termino la animacion\n");*/
+				playIndex = 0;
+				play = false;
+			}
+			else //Interpolaci√≥n del pr√≥ximo cuadro
+			{
+
+				i_curr_steps = 0; //Resetea contador
+				//Interpolar
+				interpolation();
+			}
+		}
+		else
+		{
+			//Dibujar Animaci√≥n
+
+			movAnya_x += KeyFrame[playIndex].movAnya_xInc;
+			movAnya_y += KeyFrame[playIndex].movAnya_yInc;
+			movAnya_z += KeyFrame[playIndex].movAnya_zInc;
+			rotacionAnya += KeyFrame[playIndex].rotacionAnyaInc;
 			i_curr_steps++;
 		}
 
@@ -440,6 +553,8 @@ int main()
 	cuerpo.LoadModel("Models/TableroPinball/cuerpo.obj");
 	frente = Model();
 	frente.LoadModel("Models/TableroPinball/frente.obj");
+	pantalla_marco = Model();
+	pantalla_marco.LoadModel("Models/TableroPinball/pantalla_marco.obj");
 	base_monedas = Model();
 	base_monedas.LoadModel("Models/TableroPinball/base_monedas.obj");
 	base_monedas_amarilla = Model();
@@ -462,6 +577,52 @@ int main()
 	resorte.LoadModel("Models/TableroPinball/resorte.obj");
 	soporte_resorte = Model();
 	soporte_resorte.LoadModel("Models/TableroPinball/soporte_resorte.obj");
+	base_tablero = Model();
+	base_tablero.LoadModel("Models/TableroPinball/base_tablero.obj");
+	base_segunda_capa = Model();
+	base_segunda_capa.LoadModel("Models/TableroPinball/base_segunda_capa.obj");
+	palanca = Model();
+	palanca.LoadModel("Models/TableroPinball/palanca.obj");
+
+	//Obst√°culos
+	objeto_animado_ins1 = Model();
+	objeto_animado_ins1.LoadModel("Models/TableroPinball/objeto_animado_ins1.obj");
+	objeto_animado_ins2 = Model();
+	objeto_animado_ins2.LoadModel("Models/TableroPinball/objeto_animado_ins2.obj");
+	objeto_animado_ins3 = Model();
+	objeto_animado_ins3.LoadModel("Models/TableroPinball/objeto_animado_ins3.obj");
+	obstaculo_medio_tubo = Model();
+	obstaculo_medio_tubo.LoadModel("Models/TableroPinball/obstaculo_medio_tubo.obj");
+	obstaculo_rejilla = Model();
+	obstaculo_rejilla.LoadModel("Models/TableroPinball/obstaculo_rejilla.obj");
+	paleta_superior_der = Model();
+	paleta_superior_der.LoadModel("Models/TableroPinball/paleta_superior_der.obj");
+	paleta_superior_izq = Model();
+	paleta_superior_izq.LoadModel("Models/TableroPinball/paleta_superior_izq.obj");
+	paleta_inferior_der = Model();
+	paleta_inferior_der.LoadModel("Models/TableroPinball/paleta_inferior_der.obj");
+	paleta_inferior_izq = Model();
+	paleta_inferior_izq.LoadModel("Models/TableroPinball/paleta_inferior_izq.obj");
+	palanca = Model();
+	palanca.LoadModel("Models/TableroPinball/palanca.obj");
+	rampa = Model();
+	rampa.LoadModel("Models/TableroPinball/rampa.obj");
+	tornillos_morados = Model();
+	tornillos_morados.LoadModel("Models/TableroPinball/tornillos_morados.obj");
+	tornillos_morados2 = Model();
+	tornillos_morados2.LoadModel("Models/TableroPinball/tornillos_morados_2.obj");
+
+	//Modelos del avatar (ANYA)
+	anya_cabeza = Model();
+	anya_cabeza.LoadModel("Models/TableroPinball/anya_cabeza.obj");
+	anya_cuerpo = Model();
+	anya_cuerpo.LoadModel("Models/TableroPinball/anya_cuerpo.obj");
+	anya_manos = Model();
+	anya_manos.LoadModel("Models/TableroPinball/anya_manos.obj");
+	anya_pierna_der = Model();
+	anya_pierna_der.LoadModel("Models/TableroPinball/anya_pierna_der.obj");
+	anya_pierna_izq = Model();
+	anya_pierna_izq.LoadModel("Models/TableroPinball/anya_pierna_izq.obj");
 
 
 	Kitt_M = Model();
@@ -474,12 +635,12 @@ int main()
 
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/sp2_rt.png");
-	skyboxFaces.push_back("Textures/Skybox/sp2_lf.png");
-	skyboxFaces.push_back("Textures/Skybox/sp2_dn.png");
-	skyboxFaces.push_back("Textures/Skybox/sp2_up.png");
-	skyboxFaces.push_back("Textures/Skybox/sp2_bk.png");
-	skyboxFaces.push_back("Textures/Skybox/sp2_ft.png");
+	skyboxFaces.push_back("Textures/Skybox/px.png");
+	skyboxFaces.push_back("Textures/Skybox/nx.png");
+	skyboxFaces.push_back("Textures/Skybox/ny.png");
+	skyboxFaces.push_back("Textures/Skybox/py.png");
+	skyboxFaces.push_back("Textures/Skybox/nz.png");
+	skyboxFaces.push_back("Textures/Skybox/pz.png");
 
 	skybox = Skybox(skyboxFaces);
 
@@ -487,17 +648,18 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sÛlo 1 y siempre debe de existir
+	//luz direccional, s√≥lo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.3f, 0.3f,
 		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
-	//DeclaraciÛn de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
+	//Luz ambiental para todo el escenario
+
+	pointLights[0] = PointLight(0.0f, 0.89f, 0.0f,
 		0.0f, 1.0f,
-		0.0f, 2.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
+		0.0f, 18.05f, 50.0f,  //posicion
+		1.0f, 0.0f, 0.0f);
 	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
@@ -510,15 +672,32 @@ int main()
 		5.0f);
 	spotLightCount++;
 
-	//luz fija
-	spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
+	//luz para el tablero de pinball
+	spotLights[1] = SpotLight(1.0f, 0.0f, 1.0f,
+		1.0f, 2.0f, //ambiental, difuso
+		5.0f, 60.0f, -30.0f,  //posicion
+		0.0f, -5.0f, 0.0f,  //direcci√≥n a la que apunta
+		1.0f, 0.02f, 0.0f, //ecuacion
+		30.0f); //angulo de apertura del cono
 	spotLightCount++;
 
+	//luz para los flippers o paletas inferiores
+	spotLights[2] = SpotLight(0.0f, 0.0f, 1.0f,
+		1.0f, 4.0f, //ambiental, difuso
+		0.0f, 18.99f, -6.0f,  //posicion
+		0.0f, -5.0f, 0.0f,  //direcci√≥n a la que apunta
+		1.0f, 0.05f, 0.001f, //ecuacion
+		45.0f); //angulo de apertura del cono
+	spotLightCount++;
+
+	//luz del objeto instanciado muchas veces
+	spotLights[3] = SpotLight(0.7922f, 0.9804f, 0.0471f,
+		1.0f, 2.0f, //ambiental, difuso
+		0.0f, 18.0f, -8.0f, //posicion
+		0.0f, -5.0f, 0.0f, //direcci√≥n a la que apunta
+		1.0f, 0.0f, 0.0f, //
+		130.0f); //angulo de apertura del cono
+	spotLightCount++;
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset=0;
@@ -529,14 +708,28 @@ int main()
 	movOffset = 0.01f;
 	rotllanta = 0.0f;
 	rotllantaOffset = 10.0f;
-	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
+	glm::vec3 posblackhawk = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 posAnya = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	movPelota = 0.0f;
+	movPelotaOffset = 0.04f;
+	rotPelota = 0.0f;
+	rotPelotaOffset = 5.0f;
+	avanzaPelota = true;
+
 	
-	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQUÕ
+
+	movPalanca = 0.0f;
+	movPalancaOffset = 0.02f;
+	rotPalancaOffset = 5.0f;
+	avanzaPalanca = true;
+	
+	//---------PARA TENER KEYFRAMES GUARDADOS NO VOLATILES QUE SIEMPRE SE UTILIZARAN SE DECLARAN AQU√ç
 
 	KeyFrame[0].movPelota_x = 0.0f;
 	//KeyFrame[0].movPelota_y = 0.0f;
 	KeyFrame[0].movPelota_z = 0.0f;
-	KeyFrame[0].rotacionPelota = 360;
+	KeyFrame[0].rotacionPelota = -360;
 
 
 	//Sube sobre el carril del tablero de pinball 
@@ -545,27 +738,60 @@ int main()
 	KeyFrame[1].movPelota_z = -16.0f;
 	KeyFrame[1].rotacionPelota = 360;
 
-	//Sale del carril del tablero de pinball y a partir de aquÌ debe hacer una curva definida por los siguientes keyframes
-	KeyFrame[2].movPelota_x = -5.0f;
+	//Sale del carril del tablero de pinball y a partir de aqu√≠ debe hacer una curva definida por los siguientes keyframes
+	KeyFrame[2].movPelota_x = -6.0f;
 	//KeyFrame[2].movPelota_y = 0.0f;
-	KeyFrame[2].movPelota_z = -14.0f;
+	KeyFrame[2].movPelota_z = -15;
 	KeyFrame[2].rotacionPelota = 360;
 
 
-	KeyFrame[3].movPelota_x = -6.2f;
+	KeyFrame[3].movPelota_x = -5.5f;
 	//KeyFrame[3].movPelota_y = 0.0f;
-	KeyFrame[3].movPelota_z = 3.0f;
+	KeyFrame[3].movPelota_z = -9.5f;
 	KeyFrame[3].rotacionPelota = 360;
 
-	KeyFrame[4].movPelota_x = 0.0f;
+	KeyFrame[4].movPelota_x = -7.0f;
 	//KeyFrame[4].movPelota_y = 0.0f;
-	KeyFrame[4].movPelota_z = 0.0f;
-	KeyFrame[4].rotacionPelota = 0;
+	KeyFrame[4].movPelota_z = -6.8f;
+	KeyFrame[4].rotacionPelota = 360;
 
-	KeyFrame[5].movPelota_x = -6.0f;
+	KeyFrame[5].movPelota_x = -4.0f;
 	//KeyFrame[5].movPelota_y = 0.0f;
-	KeyFrame[5].movPelota_z = 3.0f;
+	KeyFrame[5].movPelota_z = -6.7f;
 	KeyFrame[5].rotacionPelota = 360;
+
+	KeyFrame[6].movPelota_x = -5.7f;
+	//KeyFrame[5].movPelota_y = 0.0f;
+	KeyFrame[6].movPelota_z = 5.0f;
+	KeyFrame[6].rotacionPelota = 0;
+
+	KeyFrame[7].movPelota_x =  0.0f;
+	KeyFrame[7].movPelota_y = -1.0f;
+	KeyFrame[7].movPelota_z =  0.0f;
+	KeyFrame[7].rotacionPelota = 0;
+
+	
+	//Animacion de Anya
+	KeyFrame[8].movAnya_x = 0.0f;
+	KeyFrame[8].movAnya_y = 0.0f;
+	KeyFrame[8].movAnya_z = 10.0f;
+	KeyFrame[8].rotacionAnya = 40;
+
+	KeyFrame[9].movAnya_x = -3.0f;
+	KeyFrame[9].movAnya_y = 0.0f;
+	KeyFrame[9].movAnya_z = 12.0f;
+	KeyFrame[9].rotacionAnya = -40;
+
+	KeyFrame[10].movAnya_x = -0.0f;
+	KeyFrame[10].movAnya_y = 0.0f;
+	KeyFrame[10].movAnya_z = 9.0f;
+	KeyFrame[10].rotacionAnya = 40;
+
+	KeyFrame[11].movAnya_x = 1.99f;
+	KeyFrame[11].movAnya_y = 0.0f;
+	KeyFrame[11].movAnya_z = 14.0f;
+	KeyFrame[11].rotacionAnya = -40;
+
 
 	
 
@@ -590,6 +816,42 @@ int main()
 		}
 		rotllanta += rotllantaOffset * deltaTime;
 
+		//Si meterMoneda se selecciona (tecla 7) se activa la animaci√≥n de la moneda, una vez que se mete la moneda, se debe activar la animacion de la pelota
+		//Si meterMoneda se selecciona (tecla 7) se activa la animaci√≥n de la moneda, una vez que se mete la moneda, se debe activar la animacion de la pelota
+		if (mainWindow.getMeterMoneda())
+		{
+			if (avanzaMoneda)
+			{
+				if (movMoneda > -15.0f)
+				{
+					movMoneda -= movMonedaOffset * deltaTime;
+					//printf("avanza%f \n ",movCoche);
+					rotMoneda += rotMonedaOffset * deltaTime;
+					if (movMoneda < -9.0f)
+					{
+						if (avanzaPelota)
+						{
+							if (movPelota > -10)
+							{
+								movPelota -= movPelotaOffset * deltaTime;
+								//printf("avanza%f \n ",movCoche);
+								rotPelota += rotPelotaOffset * deltaTime;
+							}
+							else
+							{
+								avanzaPelota = false;
+							}
+						}
+
+					}
+				}
+				else
+				{
+					avanzaMoneda = false;
+				}
+			}
+
+		}
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
@@ -599,6 +861,7 @@ int main()
 		//-------Para Keyframes
 		inputKeyframes(mainWindow.getsKeys());
 		animate();
+		animate2();
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -612,7 +875,7 @@ int main()
 		uniformColor = shaderList[0].getColorLocation();
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
 
-		//informaciÛn en el shader de intensidad especular y brillo
+		//informaci√≥n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
@@ -620,17 +883,26 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		// luz ligada a la c·mara de tipo flash
+		// luz ligada a la c√°mara de tipo flash
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
-		//informaciÛn al shader de fuentes de iluminaciÛn
+		//informaci√≥n al shader de fuentes de iluminaci√≥n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
-
+		tiempoLuz++;
+		if (tiempoLuz == 60) {
+			apagadoLuz = !apagadoLuz;
+			tiempoLuz = 0;
+		}
+		if (apagadoLuz) {
+			shaderList[0].SetPointLights(pointLights, pointLightCount - 1);
+		}
+		else
+			shaderList[0].SetPointLights(pointLights, pointLightCount);
 
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
@@ -638,17 +910,7 @@ int main()
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
 		
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		pisoTexture.UseTexture();
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-
-		meshList[2]->RenderMesh();
-
+	
 
 
 		//Instancia del coche 
@@ -712,38 +974,62 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Blackhawk_M.RenderModel();
 
+		//--------------------------------------------- AVATAR CON MODELADO GER√ÅRQUICO ------------------------------------------------------
+		model = glm::mat4(1.0);
+		posAnya = glm::vec3(posXanya + movAnya_x, posYanya + movAnya_y, posZanya + movAnya_z);
+		model = glm::translate(model, posAnya);
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		anya_cuerpo.RenderModel();
+
+		//Cabeza
+		model = modelaux;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		anya_cabeza.RenderModel();
+
+		//Manos
+        model = modelaux;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		anya_manos.RenderModel();
+
+		//Pierna derecha
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.423f, 18.599f, 21.697f));
+		model = glm::rotate(model, rotacionAnya * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(-0.423f, -18.599f, -21.697f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		anya_pierna_der.RenderModel();
+
+		//Pierna izquierda
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(1.303f, 18.599f, 21.697f));
+		model = glm::rotate(model, rotacionAnya * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(-1.303f, -18.599f, -21.697f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		anya_pierna_izq.RenderModel();
+		 
+
 		//----------------------------------------- TABLERO DE PINBALL ----------------------------------------------
 		model = glm::mat4(1.0);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		cuerpo.RenderModel();
-
-		model = glm::mat4(1.0);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		frente.RenderModel();
-
-		model = glm::mat4(1.0);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pantalla_marco.RenderModel();;
 		base_monedas.RenderModel();
-
-		model = glm::mat4(1.0);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		base_monedas_amarilla.RenderModel();
-
-		model = glm::mat4(1.0);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		moneda_entrada.RenderModel();
-
-		model = glm::mat4(1.0);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		boton_rojo.RenderModel();
-
-		model = glm::mat4(1.0);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		patas.RenderModel();
 
+		//Hacer que la palanca y el resorte hagan su animaci√≥n, para ello se desplaza la palanca y el resorte se estira (se escala en z), luego se comprime y la canica sale disparada
 		model = glm::mat4(1.0);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		resorte.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0, movPalanca));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		palanca.RenderModel();
 
 		model = glm::mat4(1.0);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -751,13 +1037,78 @@ int main()
 
 
 
+		//model = glm::mat4(1.0);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//tablero_pinball.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		base_tablero.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		base_segunda_capa.RenderModel();
+
+		//obstaculos
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		objeto_animado_ins1.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		objeto_animado_ins2.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		objeto_animado_ins3.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		obstaculo_medio_tubo.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		obstaculo_rejilla.RenderModel();
+
+		//Mover las paletas con teclas asignables
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(1.058f, 17.107f, 11.204f));
+		model = glm::rotate(model, glm::radians(mainWindow.getAnguloCofre()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(-1.058f, -17.107f, -11.204f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		paleta_superior_der.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-0.982f, 11.204f, 11.232f));
+		model = glm::rotate(model, glm::radians(mainWindow.getAnguloCofre()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.982f, -11.204f, -11.232f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		paleta_superior_izq.RenderModel();
+
+		model = glm::mat4(1.0);
+        model = glm::translate(model, glm::vec3(1.961f, 17.154f, 5.963f));
+		model = glm::rotate(model, glm::radians(mainWindow.getAnguloCofre()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(-1.961f, -17.154f, -5.963f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		paleta_inferior_der.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-1.786f, 17.154f, 5.963f));
+		model = glm::rotate(model, glm::radians(mainWindow.getAnguloCofre()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(1.786f, -17.154f, -5.963f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		paleta_inferior_izq.RenderModel();
+
+		//----------------------------------------------------------------------------------------------------
 		model = glm::mat4(1.0);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		tablero_pinball.RenderModel();
+		rampa.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tornillos_morados.RenderModel();
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		tornillos_morados2.RenderModel();
+
+
 
 		// ----------------- PELOTA Y ANIMACION ------------------------------
+		//animaci√≥n por keyframes
 		model = glm::mat4(1.0);
-		posblackhawk = glm::vec3(posXpelota + movPelota_x, posYpelota + movPelota_y, posZavion + movPelota_z);
+		posblackhawk = glm::vec3(posXpelota + movPelota_x, posYpelota + movPelota_y, posZpelota + movPelota_z);
 		model = glm::translate(model, posblackhawk);
 		//model = glm::translate(model, glm::vec3(0.0, 0.0f, movPelota));
 		model = glm::translate(model, glm::vec3(5.652f, 17.172, 4.064f));
@@ -766,13 +1117,12 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		canica.RenderModel();
 
+		//animacion sencilla
 		model = glm::mat4(1.0);
-		//posblackhawk = glm::vec3(posXpelota + movPelota_x, posYpelota + movPelota_y, posZavion + movPelota_z);
-		//model = glm::translate(model, posblackhawk);
-		////model = glm::translate(model, glm::vec3(0.0, 0.0f, movPelota));
-		//model = glm::translate(model, glm::vec3(5.652f, 17.172, 4.064f));
-		//model = glm::rotate(model, rotacionPelota * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(0.0f, 17.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0, 0.0f, movPelota));
+		model = glm::translate(model, glm::vec3(5.652f, 17.172, 4.064f));
+		model = glm::rotate(model, rotacionPelota * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(-5.652f, -17.172, -4.064f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		canica2.RenderModel();
 
@@ -780,8 +1130,8 @@ int main()
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(13.35f, -3.0f, 3.0f));
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-		//model = glm::translate(model, glm::vec3(0.0, 0.0f, movMoneda));
-		//model = glm::rotate(model, rotMoneda * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0, 0.0f, movMoneda));
+		model = glm::rotate(model, rotMoneda * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		moneda.RenderModel();
 
@@ -789,7 +1139,7 @@ int main()
 
 		//---------------------------------------------------------------------------------------------------------------------
 
-		//Agave øquÈ sucede si lo renderizan antes del coche y de la pista?
+		//Agave ¬øqu√© sucede si lo renderizan antes del coche y de la pista?
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.5f, -2.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
@@ -834,127 +1184,14 @@ int main()
 		meshList[4]->RenderMesh();
 
 
-	/*
-		//plano con todos los n˙meros
-		toffsetnumerou = 0.0;
-		toffsetnumerov = 0.0;
-		toffset = glm::vec2(toffsetnumerou, toffsetnumerov);
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-6.0f, 2.0f, -6.0f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		color = glm::vec3(1.0f, 1.0f, 1.0f);
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		NumerosTexture.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[5]->RenderMesh();
 
-		//n˙mero 1
-		//toffsetnumerou = 0.0;
-		//toffsetnumerov = 0.0;
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-10.0f, 2.0f, -6.0f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		//glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		color = glm::vec3(1.0f, 1.0f, 1.0f);
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		NumerosTexture.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[6]->RenderMesh();
-
-		for (int i = 1; i<4; i++)
-		{
-			//n˙meros 2-4
-			toffsetnumerou += 0.25;
-			toffsetnumerov = 0.0;
-			toffset = glm::vec2(toffsetnumerou, toffsetnumerov);
-			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-10.0f - (i * 3.0), 2.0f, -6.0f));
-			model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-			glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			color = glm::vec3(1.0f, 1.0f, 1.0f);
-			glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-			NumerosTexture.UseTexture();
-			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			meshList[6]->RenderMesh();
-
-		 }
-
-		for (int j = 1; j < 5; j++)
-		{
-			//n˙meros 5-8
-			toffsetnumerou += 0.25;
-			toffsetnumerov = -0.33;
-			toffset = glm::vec2(toffsetnumerou, toffsetnumerov);
-			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-7.0f - (j * 3.0), 5.0f, -6.0f));
-			model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-			glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			color = glm::vec3(1.0f, 1.0f, 1.0f);
-			glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-			NumerosTexture.UseTexture();
-			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			meshList[6]->RenderMesh();
-		}
- 
-	*/
-		//n˙mero cambiante 
-		/*
-		øCÛmo hacer para que sea a una velocidad visible?
-		*/
-	/*
-		toffsetnumerocambiau += 0.25; 
-		if (toffsetnumerocambiau > 1.0)
-			toffsetnumerocambiau = 0.0;
-		toffsetnumerov = 0.0;
-		toffset = glm::vec2(toffsetnumerocambiau, toffsetnumerov);
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-10.0f, 10.0f, -6.0f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		color = glm::vec3(1.0f, 1.0f, 1.0f);
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		NumerosTexture.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[6]->RenderMesh();
-
-		//cambiar autom·ticamente entre textura n˙mero 1 y n˙mero 2
-		toffsetnumerou = 0.0;
-		toffsetnumerov = 0.0;
-		toffset = glm::vec2(toffsetnumerou, toffsetnumerov);
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-13.0f, 10.0f, -6.0f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		color = glm::vec3(1.0f, 1.0f, 1.0f);
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		Numero1Texture.UseTexture();
-		//if
-		//Numero1Texture.UseTexture();
-		//Numero2Texture.UseTexture();
-		
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[5]->RenderMesh();
-	*/
 
 		glDisable(GL_BLEND);
 		
 
 		glUseProgram(0);
 
-		mainWindow.swapBuffers();
+		mainWindow.swapBuffers(); 
 	}
 
 	return 0;
@@ -963,82 +1200,89 @@ int main()
 
 void inputKeyframes(bool* keys)
 {
-	if (keys[GLFW_KEY_SPACE])
+	if (keys[GLFW_KEY_SPACE]) // Empezar animacion
 	{
-		if (reproduciranimacion < 1)
+		//if (reproduciranimacion < 1)
+		//{
+		if (play == false && (FrameIndex > 1))
 		{
-			if (play == false && (FrameIndex > 1))
-			{
-				resetElements();
-				//First Interpolation				
-				interpolation();
-				play = true;
-				playIndex = 0;
-				i_curr_steps = 0;
-				reproduciranimacion++;
-				printf("\n presiona 0 para habilitar reproducir de nuevo la animaciÛn'\n");
-				habilitaranimacion = 0;
+			resetElements();
+			//First Interpolation				
+			interpolation();
+			play = true;
+			playIndex = 0;
+			i_curr_steps = 0;
+			//reproduciranimacion++;
+			//printf("presiona 0 para habilitar reproducir de nuevo la animaciÔøΩn'\n");
+			//habilitaranimacion = 0;
 
-			}
-			else
-			{
-				play = false;
-
-			}
 		}
-	}
-	if (keys[GLFW_KEY_0])
-	{
-		if (habilitaranimacion < 1 && reproduciranimacion>0)
+		else
 		{
-			printf("Ya puedes reproducir de nuevo la animaciÛn con la tecla de barra espaciadora'\n");
+			play = false;
+		}
+		//}
+	}
+	/*if (keys[GLFW_KEY_0])
+	{
+		if (habilitaranimacion < 1)
+		{
 			reproduciranimacion = 0;
-			
 		}
-	}
+	}*/
 
-	if (keys[GLFW_KEY_L])
+	if (keys[GLFW_KEY_L] ) //Guardar
 	{
 		if (guardoFrame < 1)
 		{
 			saveFrame();
+			/*printf("\n--------- SE GUARDA -----------\n");
 			printf("movAvion_x es: %f\n", movAvion_x);
 			printf("movAvion_y es: %f\n", movAvion_y);
-			printf("presiona P para habilitar guardar otro frame'\n");
+			printf("movAvion_z es: %f\n", movAvion_z);
+			printf("giroAvionY es: %f\n", giroAvionY);
+			printf("giroAvionX es: %f\n", giroAvionX);
+			printf("presiona R para habilitar guardar otro frame'\n");
+			printf("\n-----------------------------\n");*/
 			guardoFrame++;
 			reinicioFrame = 0;
 		}
 	}
-	if (keys[GLFW_KEY_P])
+	if (keys[GLFW_KEY_R])
 	{
 		if (reinicioFrame < 1)
 		{
 			guardoFrame = 0;
-			printf("Ya puedes guardar otro frame presionando la tecla L'\n");
 		}
 	}
 
+	//if (keys[GLFW_KEY_1])
+	//{
+	//	if (ciclo < 1)
+	//	{
+	//		//printf("movAvion_x es: %f\n", movAvion_x);
+	//		/*movAvion_x += 1.0f;*/
+	//	/*	printf("\n movAvion_x es: %f\n", movAvion_x);*/
+	//		ciclo++;
+	//		ciclo2 = 0;
+	//		printf("\n Presiona la tecla 2 para poder habilitar la variable\n");
+	//	}
 
-	if (keys[GLFW_KEY_1])
-	{
-		if (ciclo < 1)
-		{
-			//printf("movAvion_x es: %f\n", movAvion_x);
-			movAvion_x += 1.0f;
-			printf("\n movAvion_x es: %f\n", movAvion_x);
-			ciclo++;
-			ciclo2 = 0;
-			printf("\n Presiona la tecla 2 para poder habilitar la variable\n");
-		}
+	//}
+	//if (keys[GLFW_KEY_2])
+	//{
+	//	if (ciclo2 < 1)
+	//	{
+	//		ciclo = 0;
+	//		printf("\n Ya puedes modificar tu variable presionando la tecla 1\n");
+	//	}
+	//}
 
-	}
-	if (keys[GLFW_KEY_2])
+	if (keys[GLFW_KEY_RIGHT] ) // DECREMENTA Z
 	{
-		if (ciclo2 < 1)
-		{
-			ciclo = 0;
-			printf("\n Ya puedes modificar tu variable presionando la tecla 1\n");
-		}
+		//movPalanca_z -= 1.0f;
+		
 	}
 
 }
+

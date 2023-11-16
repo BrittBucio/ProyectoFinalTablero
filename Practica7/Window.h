@@ -24,6 +24,12 @@ public:
 	GLboolean getMeterMoneda() { return meterMoneda; }
 	GLboolean getTirarDado() { return tirarDado; }
 	GLboolean getDespegaHelicoptero() { return despegaHelicoptero; }
+	GLboolean getMoverFlipperInferiorIzq() { return moverFlipperInferiorIzq; }
+	GLboolean getMoverFlipperInferiorDer() { return moverFlipperInferiorDer; }
+	GLboolean getMoverFlipperSuperiorIzq() { return moverFlipperSuperiorIzq; }
+	GLboolean getMoverFlipperSuperiorDer() { return moverFlipperSuperiorDer; }
+	GLboolean getMouseFirstMoved() { return mouseFirstMoved; }
+	GLboolean getAction() { return action; }
 	
 
 	bool getShouldClose() {
@@ -53,6 +59,11 @@ private:
 	GLboolean meterMoneda;
 	GLboolean tirarDado;
 	GLboolean despegaHelicoptero;
+	GLboolean moverFlipperInferiorIzq;
+	GLboolean moverFlipperInferiorDer;
+	GLboolean moverFlipperSuperiorIzq;
+	GLboolean moverFlipperSuperiorDer;
+	GLboolean action = false;
 
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
