@@ -30,6 +30,8 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 
 	numCamara = 1;
 
+	numCamara = 1;
+
 
 	for (size_t i = 0; i < 1024; i++)
 	{
