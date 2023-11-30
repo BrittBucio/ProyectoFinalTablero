@@ -104,7 +104,7 @@
     <ClCompile Include="Window.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="practica10keyframes.cpp">
+    <ClCompile Include="Main_ProyectoFinal.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

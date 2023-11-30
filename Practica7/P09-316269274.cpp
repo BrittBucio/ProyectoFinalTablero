@@ -381,15 +381,23 @@ int main()
 	helipuerto = Model();
 	helipuerto.LoadModel("Models/helipuerto.obj");
 
-	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	std::vector<std::string> skyboxFacesDay, skyboxFacesNight;
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_rt.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_lf.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_dn.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_up.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_bk.tga");
+	skyboxFacesDay.push_back("Textures/Skybox/cupertin-lake_ft.tga");
 
-	skybox = Skybox(skyboxFaces);
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake_rtN.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake_lfN.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake_dnN.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake_upN.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake_bkN.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake_ftN.tga");
+
+	skyboxDay = Skybox(skyboxFacesDay);
+	skyboxNight = Skybox(skyboxFacesNight);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -624,7 +632,32 @@ int main()
 			}
 		}
 
-		
+		if (avanza)
+		{
+			if (movCoche > -300.0f)
+			{
+				movCoche -= movOffset * deltaTime;
+				//printf("avanza%f \n ",movCoche);
+				rotllanta += rotllantaOffset * deltaTime;
+			}
+			else
+			{
+				avanza = false;
+			}
+		}
+		else
+		{
+			if (movCoche < 285.0f)
+			{
+				movCoche += movOffset * deltaTime;
+				//printf("avanza%f \n ",movCoche);
+				rotllanta -= rotllantaOffset * deltaTime;
+			}
+			else
+			{
+				avanza = true;
+			}
+		}
 
 
 		

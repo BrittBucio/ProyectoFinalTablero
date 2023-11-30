@@ -1,19 +1,71 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (Practica7.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
+  Camera.cpp
+  DirectionalLight.cpp
+E:\Proyecto\ProyectoFinalTablero\Practica7\DirectionalLight.cpp(18,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\DirectionalLight.cpp(19,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\DirectionalLight.cpp(21,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\DirectionalLight.cpp(22,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+  Light.cpp
+  Main_ProyectoFinal.cpp
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Main_ProyectoFinal.cpp(891,28): warning C4305: 'argumento': truncamiento de 'double' a 'irrklang::ik_f32'
+E:\Proyecto\ProyectoFinalTablero\Practica7\Main_ProyectoFinal.cpp(899,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Main_ProyectoFinal.cpp(901,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Main_ProyectoFinal.cpp(1389,26): warning C4305: '+=': truncamiento de 'double' a 'float'
+  Material.cpp
+  Mesh_tn.cpp
+  Model.cpp
+E:\Proyecto\ProyectoFinalTablero\Practica7\Model.cpp(16,10): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'const std::string'
+E:\Proyecto\ProyectoFinalTablero\Practica7\Model.cpp(16,80): warning C4474: "printf": se pasaron demasiados argumentos para la cadena de formato
+E:\Proyecto\ProyectoFinalTablero\Practica7\Model.cpp(16,80): message : los marcadores de posición y sus parámetros esperan 1 argumentos variádicos, pero se proporcionaron 2
+E:\Proyecto\ProyectoFinalTablero\Practica7\Model.cpp(51,7): warning C4804: '<': uso no seguro del tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Model.cpp(51,21): warning C4018: '<': no coinciden signed/unsigned
+E:\Proyecto\ProyectoFinalTablero\Practica7\Model.cpp(138,14): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'std::string'
+E:\Proyecto\ProyectoFinalTablero\Practica7\Model.cpp(147,14): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'std::string'
+  PointLight.cpp
+E:\Proyecto\ProyectoFinalTablero\Practica7\PointLight.cpp(28,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\PointLight.cpp(29,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\PointLight.cpp(30,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\PointLight.cpp(32,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\PointLight.cpp(33,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\PointLight.cpp(34,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\PointLight.cpp(35,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
+  Shader_light.cpp
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(215,75): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(215,26): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(214,91): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(214,42): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(228,98): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(228,62): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(228,24): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(227,70): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(227,24): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(226,88): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Shader_light.cpp(226,42): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
+  Skybox.cpp
+  Sphere.cpp
+E:\Proyecto\ProyectoFinalTablero\Practica7\Sphere.cpp(39,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Sphere.cpp(43,16): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  SpotLight.cpp
+  Texture.cpp
   Window.cpp
 E:\Proyecto\ProyectoFinalTablero\Practica7\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
 E:\Proyecto\ProyectoFinalTablero\Practica7\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(163,62): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(172,63): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(183,61): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(192,62): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(202,58): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(211,56): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(221,65): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(252,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(253,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(259,28): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(260,40): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(262,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(263,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(88): warning C4715: 'Window::Initialise': no todas las rutas de acceso de control devuelven un valor
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(178,62): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(187,63): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(198,61): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(207,62): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(217,58): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(226,56): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(236,65): warning C4805: '==': combinación no segura del tipo 'GLboolean' y el tipo 'bool' en la operación
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(267,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(268,22): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(274,28): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(275,40): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(277,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(278,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  Generando código...
+E:\Proyecto\ProyectoFinalTablero\Practica7\Window.cpp(92): warning C4715: 'Window::Initialise': no todas las rutas de acceso de control devuelven un valor
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
   Practica7.vcxproj -> E:\Proyecto\ProyectoFinalTablero\Debug\Practica7-8.exe

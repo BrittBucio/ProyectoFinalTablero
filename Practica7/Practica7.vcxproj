@@ -83,7 +83,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>lib;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glew32.lib;;glfw3.lib;opengl32.lib;assimp-vc140-mt.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glew32.lib;;glfw3.lib;opengl32.lib;assimp-vc140-mt.lib;irrKlang.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,7 +102,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>lib;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glew32.lib;;glfw3.lib;opengl32.lib;assimp-vc140-mt.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glew32.lib;;glfw3.lib;opengl32.lib;assimp-vc140-mt.lib;irrKlang.lib;</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -155,11 +155,11 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Main_ProyectoFinal.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh_tn.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="practica10keyframes.cpp" />
     <ClCompile Include="Shader_light.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Sphere.cpp" />
